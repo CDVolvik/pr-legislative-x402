@@ -2,22 +2,36 @@ import type { Express } from "express";
 import { PRICED_ROUTES } from "./routes.js";
 
 /**
- * Isolated x402 payment layer. EVERYTHING payment-SDK-specific lives here so
- * the rest of the app stays stable while the young x402 ecosystem churns.
- * (There are already two package families in the wild: `@x402/express` @ 2.x
- * and unscoped `x402-express`/`x402-fetch` @ 1.x — hence the env overrides.)
+ * Isolated x402 payment layer (seller side). All payment-SDK specifics live
+ * here so the rest of the app is insulated from the young, churning ecosystem.
  *
- * Two modes:
- *   PAYMENTS_ENABLED != "true"  -> endpoints are OPEN. No wallet/SDK needed.
- *                                  Default for dev, tests, demos.
- *   PAYMENTS_ENABLED == "true"  -> real per-call charging via x402 on Base.
+ * Wiring below matches the REAL installed API of @x402/express@2.x (verified
+ * against its type defs), not a guess:
+ *   - RoutesConfig = Record<"<METHOD> <path>", { payTo, price, network }>
+ *   - paymentMiddlewareFromConfig(routes, facilitator?) -> express middleware
+ *   - Testnet (base-sepolia) uses the free default facilitator; mainnet uses
+ *     the Coinbase facilitator from @coinbase/x402 (needs CDP_API_KEY_* env).
  *
- * The SDK is loaded via a *runtime* string specifier + `any`, on purpose: the
- * scaffold typechecks and builds without the package installed, and you can
- * swap package/API when you flip payments on. VERIFY the middleware signature
- * against current docs (https://docs.cdp.coinbase.com/x402) before going live.
+ * Loaded via dynamic import + `any` so the app still typechecks/builds without
+ * the SDK, and only pulls it in when PAYMENTS_ENABLED=true. The one thing types
+ * can't prove is a live settlement — CERTIFY on Base Sepolia before mainnet
+ * (see README "Make it live").
+ *
+ * Modes:
+ *   PAYMENTS_ENABLED != "true"  -> endpoints OPEN (dev/test/demo). No wallet.
+ *   PAYMENTS_ENABLED == "true"  -> per-call charging via x402.
  */
 export const PAYMENTS_ENABLED = process.env.PAYMENTS_ENABLED === "true";
+
+/** Build the SDK-shaped RoutesConfig from our price table + runtime payTo/network. */
+export function buildX402Routes(payTo: string, network: string): Record<string, unknown> {
+  return Object.fromEntries(
+    Object.entries(PRICED_ROUTES).map(([pattern, cfg]) => [
+      pattern,
+      { payTo, price: cfg.price, network },
+    ]),
+  );
+}
 
 export async function applyPaymentGate(app: Express): Promise<void> {
   if (!PAYMENTS_ENABLED) {
@@ -28,21 +42,23 @@ export async function applyPaymentGate(app: Express): Promise<void> {
   }
 
   const payTo = process.env.RECEIVING_WALLET_ADDRESS;
-  if (!payTo) {
-    throw new Error("RECEIVING_WALLET_ADDRESS is required when PAYMENTS_ENABLED=true");
+  if (!payTo) throw new Error("RECEIVING_WALLET_ADDRESS is required when PAYMENTS_ENABLED=true");
+
+  const network = process.env.X402_NETWORK ?? "base";
+  const isTestnet = network.includes("sepolia");
+  const routes = buildX402Routes(payTo, network);
+
+  const x402: any = await import("@x402/express");
+  let middleware;
+  if (isTestnet) {
+    // Free public facilitator on testnet — no CDP creds needed.
+    middleware = x402.paymentMiddlewareFromConfig(routes);
+  } else {
+    // Mainnet: Coinbase facilitator (reads CDP_API_KEY_ID / CDP_API_KEY_SECRET).
+    const coinbase: any = await import("@coinbase/x402");
+    middleware = x402.paymentMiddlewareFromConfig(routes, coinbase.facilitator);
   }
 
-  // Runtime specifier (typed string) → TS won't resolve/typecheck it here.
-  const sellerPkg: string = process.env.X402_SELLER_PKG ?? "@x402/express";
-  const x402: any = await import(sellerPkg);
-
-  // Classic seller signature: paymentMiddleware(payTo, routes, facilitator?).
-  // On mainnet the facilitator needs Coinbase CDP creds; on *-sepolia it's free.
-  const facilitator =
-    process.env.X402_NETWORK?.includes("sepolia") ? undefined : { url: "https://x402.org/facilitator" };
-
-  app.use(x402.paymentMiddleware(payTo, PRICED_ROUTES, facilitator));
-  console.log(
-    `[x402] Payments ENABLED via ${sellerPkg} — settling to ${payTo} on ${process.env.X402_NETWORK ?? "base"}`,
-  );
+  app.use(middleware);
+  console.log(`[x402] Payments ENABLED — settling to ${payTo} on ${network}${isTestnet ? " (testnet)" : ""}`);
 }

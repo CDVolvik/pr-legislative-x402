@@ -3,22 +3,21 @@
  * x402 402-challenges from that wallet; otherwise return plain fetch (works
  * against an open / PAYMENTS_ENABLED=false server).
  *
- * The wallet key is read ONCE here and never logged. Use a dedicated,
- * low-balance Base key for agents — never a treasury wallet.
+ * Wiring matches the REAL x402-fetch@1.x API (verified against its type defs):
+ *   createSigner(network, privateKey) -> Signer
+ *   wrapFetchWithPayment(fetch, signer, maxValue?) -> fetch
+ * x402-fetch caps spend at 0.10 USDC/request by default — a built-in guardrail.
  *
- * SDK loaded via runtime string specifiers + `any` so this typechecks/builds
- * without x402-fetch/viem installed. Verify against current x402 docs before
- * relying on it in production.
+ * The wallet key is read once here and never logged. Use a dedicated,
+ * low-balance Base key for agents — never a treasury wallet. Loaded via dynamic
+ * import + `any` so this builds without the SDK installed.
  */
 export async function makePayFetch(): Promise<typeof fetch> {
   const pk = process.env.WALLET_PRIVATE_KEY?.trim();
   if (!pk) return fetch;
 
-  const fetchPkg: string = process.env.X402_FETCH_PKG ?? "x402-fetch";
-  const viemPkg: string = "viem/accounts";
-  const x402: any = await import(fetchPkg);
-  const viem: any = await import(viemPkg);
-
-  const account = viem.privateKeyToAccount(pk as `0x${string}`);
-  return x402.wrapFetchWithPayment(fetch, account) as typeof fetch;
+  const network = process.env.X402_NETWORK ?? "base";
+  const x402: any = await import("x402-fetch");
+  const signer = await x402.createSigner(network, pk);
+  return x402.wrapFetchWithPayment(fetch, signer) as typeof fetch;
 }
