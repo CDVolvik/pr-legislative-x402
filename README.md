@@ -94,11 +94,12 @@ PR_X402_API_BASE=http://localhost:4021 npm run dev:mcp
    Coinbase CDP keys the facilitator needs (`CDP_API_KEY_ID` / `CDP_API_KEY_SECRET`).
 4. **Deploy** — see "Deploy" below.
 
-> ⚠️ The x402 packages/versions in `package.json` (`@x402/express`, `@x402/fetch`,
-> `@coinbase/cdp-sdk`) and the wiring in `x402.ts` / `pay-fetch.ts` are labeled
-> **placeholders** — the ecosystem is weeks old and names have already shifted
-> (`x402-express` → `@x402/express`). **Verify against the current
-> [x402 docs](https://docs.cdp.coinbase.com/x402) before enabling.**
+> ✅ The seller wiring (`src/server/x402.ts`) is verified against the real
+> `@x402/express@2.x` API — an `x402ResourceServer` + `ExactEvmScheme`, CAIP-2
+> networks, `accepts`-shaped routes — and the **unpaid → 402 challenge is
+> certified on Base Sepolia** (`npm run test:testnet`). The remaining unproven
+> leg is a live paid settlement (`402 → pay → 200`), which needs a funded
+> testnet key — see [`TESTNET.md`](TESTNET.md) to run it, then flip to mainnet.
 
 ## Deploy
 

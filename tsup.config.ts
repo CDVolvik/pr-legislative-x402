@@ -8,5 +8,5 @@ export default defineConfig({
   sourcemap: true,
   // x402 SDK + viem are dynamically imported only when payments are enabled;
   // keep them external so a build without them installed still succeeds.
-  external: ["@x402/express", "x402-fetch", "@coinbase/x402", "viem"],
+  external: ["@x402/express", "@x402/core", "@x402/evm", "x402-fetch", "@coinbase/x402", "viem"],
 });

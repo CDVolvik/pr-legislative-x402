@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { PRICED_ROUTES } from "../src/server/routes.js";
-import { applyPaymentGate, PAYMENTS_ENABLED, buildX402Routes } from "../src/server/x402.js";
+import { applyPaymentGate, PAYMENTS_ENABLED, buildX402Routes, toCaip2 } from "../src/server/x402.js";
 
 describe("priced-route config integrity", () => {
   it("every priced route declares a USD price and Base network", () => {
@@ -20,20 +20,31 @@ describe("priced-route config integrity", () => {
   });
 });
 
+describe("toCaip2 (network name -> chain id)", () => {
+  it("maps Base + Base Sepolia to CAIP-2", () => {
+    expect(toCaip2("base")).toBe("eip155:8453");
+    expect(toCaip2("base-sepolia")).toBe("eip155:84532");
+  });
+  it("passes through an already-CAIP-2 value", () => {
+    expect(toCaip2("eip155:8453")).toBe("eip155:8453");
+  });
+});
+
 describe("buildX402Routes (SDK-shaped RoutesConfig)", () => {
-  it("maps every priced route to { payTo, price, network }", () => {
-    const routes = buildX402Routes("0xabc", "base") as Record<string, any>;
+  it("wraps every priced route in { accepts: { scheme, price, network, payTo } }", () => {
+    const routes = buildX402Routes("0xabc", "eip155:8453") as Record<string, any>;
     expect(Object.keys(routes)).toEqual(Object.keys(PRICED_ROUTES));
     for (const [pattern, cfg] of Object.entries(routes)) {
-      expect(cfg.payTo).toBe("0xabc");
-      expect(cfg.network).toBe("base");
-      expect(cfg.price).toBe((PRICED_ROUTES as any)[pattern].price);
+      expect(cfg.accepts.scheme).toBe("exact");
+      expect(cfg.accepts.payTo).toBe("0xabc");
+      expect(cfg.accepts.network).toBe("eip155:8453");
+      expect(cfg.accepts.price).toBe((PRICED_ROUTES as any)[pattern].price);
     }
   });
 
-  it("propagates the chosen network (e.g. testnet)", () => {
-    const routes = buildX402Routes("0xabc", "base-sepolia") as Record<string, any>;
-    expect(Object.values(routes).every((c) => c.network === "base-sepolia")).toBe(true);
+  it("propagates the chosen CAIP-2 network (e.g. testnet)", () => {
+    const routes = buildX402Routes("0xabc", "eip155:84532") as Record<string, any>;
+    expect(Object.values(routes).every((c: any) => c.accepts.network === "eip155:84532")).toBe(true);
   });
 });
 

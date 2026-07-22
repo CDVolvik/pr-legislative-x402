@@ -16,6 +16,7 @@
     "build": "tsup",
     "start": "node dist/server/index.js",
     "test": "vitest run",
+    "test:testnet": "node --env-file-if-exists=.env --import tsx scripts/testnet-smoke.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -27,6 +28,8 @@
   "//optionalDependencies": "Only needed when PAYMENTS_ENABLED=true. Two package families exist in the wild (@x402/* @ 2.x, unscoped x402-* @ 1.x); loaded via runtime specifiers so names are swappable. Verify wiring against current x402 docs before enabling.",
   "optionalDependencies": {
     "@x402/express": "^2.19.0",
+    "@x402/core": "^2.19.0",
+    "@x402/evm": "^2.19.0",
     "x402-fetch": "^1.2.0",
     "@coinbase/x402": "^2.1.0",
     "viem": "^2.21.0"
