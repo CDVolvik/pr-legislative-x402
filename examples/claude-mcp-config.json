@@ -1,0 +1,13 @@
+{
+  "//": "Drop this into a project .mcp.json (or ~/.claude.json mcpServers) to give an agent the PR legislative tools. Set PR_X402_API_BASE to your deployment. Leave WALLET_PRIVATE_KEY empty to call an open dev server; set a dedicated low-balance Base key to auto-pay a live x402 server.",
+  "mcpServers": {
+    "pr-legislative": {
+      "command": "node",
+      "args": ["/absolute/path/to/pr-legislative-x402/dist/mcp/index.js"],
+      "env": {
+        "PR_X402_API_BASE": "https://YOUR-DEPLOYMENT.vercel.app",
+        "WALLET_PRIVATE_KEY": ""
+      }
+    }
+  }
+}

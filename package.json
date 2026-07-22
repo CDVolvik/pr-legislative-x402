@@ -1,0 +1,46 @@
+{
+  "name": "pr-legislative-x402",
+  "version": "0.1.0",
+  "description": "Pay-per-call access to structured Puerto Rico legislative data (Asamblea Legislativa) over the x402 agent-payment standard. HTTP API + MCP server.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "pr-legislative-mcp": "dist/mcp/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev:server": "node --env-file-if-exists=.env --import tsx --watch src/server/index.ts",
+    "dev:mcp": "node --env-file-if-exists=.env --import tsx src/mcp/index.ts",
+    "build": "tsup",
+    "start": "node dist/server/index.js",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "@neondatabase/serverless": "^1.1.0",
+    "express": "^4.21.2",
+    "zod": "^3.24.1"
+  },
+  "//optionalDependencies": "Only needed when PAYMENTS_ENABLED=true. Two package families exist in the wild (@x402/* @ 2.x, unscoped x402-* @ 1.x); loaded via runtime specifiers so names are swappable. Verify wiring against current x402 docs before enabling.",
+  "optionalDependencies": {
+    "@x402/express": "^2.19.0",
+    "x402-fetch": "^1.2.0",
+    "@coinbase/x402": "^2.1.0",
+    "viem": "^2.21.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.0",
+    "@vercel/node": "^5.1.0",
+    "tsup": "^8.3.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

@@ -1,0 +1,53 @@
+openapi: 3.1.0
+info:
+  title: PR Legislative Data API (x402)
+  version: 0.1.0
+  description: >
+    Pay-per-call access to structured Puerto Rico Legislative Assembly measures.
+    Paid endpoints are metered with the x402 protocol (USDC on Base): an
+    unpaid request returns HTTP 402 with payment requirements; pay and retry.
+  license:
+    name: MIT
+servers:
+  - url: http://localhost:4021
+    description: Local dev (payments off)
+  - url: https://YOUR-DEPLOYMENT.vercel.app
+    description: Production
+paths:
+  /health:
+    get:
+      summary: Liveness + whether live data is wired
+      responses:
+        "200":
+          description: OK
+  /v1/preview:
+    get:
+      summary: Free teaser — corpus-wide counts only (no records)
+      responses:
+        "200":
+          description: Dataset summary
+  /v1/bills/search:
+    get:
+      summary: Search measures (summary rows, max 25)
+      description: "Priced: $0.01 via x402."
+      parameters:
+        - { name: q, in: query, schema: { type: string }, description: Text match on title or identifier }
+        - { name: chamber, in: query, schema: { type: string, enum: [upper, lower] } }
+        - { name: status, in: query, schema: { type: string }, description: "e.g. ley, aprobada, radicada" }
+        - { name: limit, in: query, schema: { type: integer, minimum: 1, maximum: 25 } }
+      responses:
+        "200": { description: Matching summary rows }
+        "400": { description: Invalid query }
+        "402": { description: Payment required (x402) }
+  /v1/bills/{identifier}:
+    get:
+      summary: Full measure detail (abstract, sponsors, action history)
+      description: "Priced: $0.03 via x402."
+      parameters:
+        - { name: identifier, in: path, required: true, schema: { type: string }, description: "e.g. PC 456 or ps-123" }
+      responses:
+        "200": { description: Full bill detail }
+        "400": { description: Invalid identifier }
+        "402": { description: Payment required (x402) }
+        "404": { description: Not found }
+components: {}
