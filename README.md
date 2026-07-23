@@ -2,6 +2,8 @@
 
 **Pay-per-call access to structured Puerto Rico legislative data, over the [x402](https://x402.org) agent-payment standard.**
 
+**▶ Live demo:** [pr-legislative-x402.vercel.app](https://pr-legislative-x402.vercel.app) — try [`/health`](https://pr-legislative-x402.vercel.app/health), [`/v1/preview`](https://pr-legislative-x402.vercel.app/v1/preview), [`/v1/bills/search?q=solar`](https://pr-legislative-x402.vercel.app/v1/bills/search?q=solar). (Sample data, payments off.)
+
 An HTTP API + MCP server that lets AI agents search and read measures of the
 Puerto Rico Legislative Assembly (Asamblea Legislativa) — and pay per call in
 USDC on Base, autonomously, no accounts or API keys.
