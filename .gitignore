@@ -6,3 +6,8 @@ dist/
 *.key
 *.log
 .DS_Store
+
+# Private job-hunt collateral — keep out of the public repo
+docs/portfolio-blurbs.md
+
+.vercel

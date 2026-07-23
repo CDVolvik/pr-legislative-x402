@@ -1,6 +1,11 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "rewrites": [{ "source": "/(.*)", "destination": "/api" }],
+  "buildCommand": "mkdir -p public && printf '<h1>pr-legislative-x402</h1><p>x402 pay-per-call PR legislative data API + MCP (sample-data demo). Try /health, /v1/preview, /v1/bills/search?q=solar. Code: github.com/kushaim/pr-legislative-x402' > public/index.html",
+  "outputDirectory": "public",
+  "rewrites": [
+    { "source": "/health", "destination": "/api" },
+    { "source": "/v1/:path*", "destination": "/api" }
+  ],
   "functions": {
     "api/index.ts": { "maxDuration": 15 }
   }
