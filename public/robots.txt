@@ -1,0 +1,5 @@
+# The ai-train choice is still pending, so no ai-train value is set here.
+# search and ai-input are allowed.
+User-agent: *
+Allow: /
+Content-Signal: search=yes, ai-input=yes
