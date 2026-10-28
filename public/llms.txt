@@ -1,0 +1,20 @@
+# pr-legislative-x402
+
+> An HTTP API and MCP server for Puerto Rico legislative data (Asamblea Legislativa), paid per call with the x402 agent-payment standard. The hosted demo serves 3 sample records with payments off. The full paid corpus is not live yet.
+
+Maintained by Carlos Jimenez (CDVolvik) at R21 Digital. MIT licensed.
+
+## API
+- [OpenAPI description](https://pr-legislative-x402.vercel.app/openapi.yaml): endpoints, parameters, responses
+- GET /health: liveness check, free
+- GET /v1/preview: corpus counts only, free
+- GET /v1/bills/search?q=&chamber=&status=&limit=: summary rows, 25 at most, $0.01 per call once payments are on
+- GET /v1/bills/:identifier: full detail (abstract, sponsors, action history), $0.03 per call once payments are on
+
+## MCP server
+- Tools: search_pr_legislation, get_pr_bill
+- [Setup](https://github.com/CDVolvik/pr-legislative-x402#use-it-from-an-agent-mcp)
+
+## Source and docs
+- [Repository and README](https://github.com/CDVolvik/pr-legislative-x402)
+- [Testnet guide](https://github.com/CDVolvik/pr-legislative-x402/blob/main/TESTNET.md)

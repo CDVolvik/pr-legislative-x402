@@ -8,6 +8,51 @@
       name="description"
       content="x402 pay-per-call Puerto Rico legislative data API + MCP server (sample-data demo)."
     />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="pr-legislative-x402 - Puerto Rico legislative data API" />
+    <meta
+      property="og:description"
+      content="Pay-per-call API and MCP server for Puerto Rico legislative data, using x402. The demo serves sample data."
+    />
+    <meta property="og:url" content="https://pr-legislative-x402.vercel.app/" />
+    <meta name="twitter:card" content="summary" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "SoftwareApplication",
+            "@id": "https://pr-legislative-x402.vercel.app/#software",
+            "name": "pr-legislative-x402",
+            "applicationCategory": "DeveloperApplication",
+            "operatingSystem": "Any",
+            "description": "HTTP API and MCP server for Puerto Rico Legislative Assembly measures, paid per call with the x402 standard. The hosted demo serves sample data.",
+            "url": "https://pr-legislative-x402.vercel.app/",
+            "license": "https://opensource.org/license/mit",
+            "codeRepository": "https://github.com/CDVolvik/pr-legislative-x402",
+            "author": { "@id": "https://pr-legislative-x402.vercel.app/#maintainer" }
+          },
+          {
+            "@type": "WebAPI",
+            "@id": "https://pr-legislative-x402.vercel.app/#api",
+            "name": "PR Legislative Data API (x402)",
+            "description": "Search and read Puerto Rico legislative measures. Free: /health, /v1/preview. Paid per call: /v1/bills/search, /v1/bills/:identifier.",
+            "documentation": "https://pr-legislative-x402.vercel.app/openapi.yaml",
+            "url": "https://pr-legislative-x402.vercel.app/",
+            "provider": { "@id": "https://pr-legislative-x402.vercel.app/#maintainer" }
+          },
+          {
+            "@type": "Person",
+            "@id": "https://pr-legislative-x402.vercel.app/#maintainer",
+            "name": "Carlos Jimenez",
+            "url": "https://github.com/CDVolvik",
+            "worksFor": { "@type": "Organization", "name": "R21 Digital", "url": "https://www.r21digital.com/en" },
+            "sameAs": ["https://github.com/CDVolvik"]
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <h1>pr-legislative-x402</h1>

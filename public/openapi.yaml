@@ -11,8 +11,8 @@ info:
 servers:
   - url: http://localhost:4021
     description: Local dev (payments off)
-  - url: https://YOUR-DEPLOYMENT.vercel.app
-    description: Production
+  - url: https://pr-legislative-x402.vercel.app
+    description: Hosted demo (sample data, payments off)
 paths:
   /health:
     get:

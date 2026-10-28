@@ -144,7 +144,7 @@ paid server) set a dedicated low-balance `WALLET_PRIVATE_KEY`. Tools exposed:
   ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) on push/PR.
 - HTTP layer: zod-validated inputs (400 on bad query/identifier), JSON 404 +
   error handlers, CORS, security headers, and a best-effort rate limit on the
-  free routes. API described in [`openapi.yaml`](openapi.yaml).
+  free routes. API described in [`public/openapi.yaml`](public/openapi.yaml).
 
 ## Buyer side (agents that pay)
 
