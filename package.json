@@ -17,7 +17,9 @@
     "start": "node dist/server/index.js",
     "test": "vitest run",
     "test:testnet": "node --env-file-if-exists=.env --import tsx scripts/testnet-smoke.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "node node_modules/typescript-native/bin/tsc --noEmit",
+    "lint": "oxlint",
+    "hooks:install": "git config core.hooksPath .githooks"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.0",
@@ -38,9 +40,11 @@
     "@types/express": "^5.0.0",
     "@types/node": "^22.10.0",
     "@vercel/node": "^5.1.0",
+    "oxlint": "^1.90.0",
     "tsup": "^8.3.5",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
+    "typescript-native": "npm:typescript@^7.0.2",
     "vitest": "^2.1.8",
     "wrangler": "^4.154.0"
   },

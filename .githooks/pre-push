@@ -1,0 +1,8 @@
+#!/bin/sh
+# Lint and typecheck before every push. Turn it on once per clone: npm run hooks:install
+# Skip it once with git push --no-verify (for example, to delete a branch).
+if [ ! -d node_modules ]; then
+  echo "pre-push: no node_modules. Run npm ci first, or push with --no-verify." >&2
+  exit 1
+fi
+npm run --silent lint && npm run --silent typecheck
