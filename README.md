@@ -140,8 +140,9 @@ paid server) set a dedicated low-balance `WALLET_PRIVATE_KEY`. Tools exposed:
 
 ## Quality gates
 
-- `npm run typecheck` · `npm test` (17 tests) · `npm run build` — all run in CI
-  ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) on push/PR.
+- `npm run lint` (Oxlint) · `npm run typecheck` (TypeScript 7) · `npm test` (17 tests) ·
+  `npm run build` — all run in CI ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) on push/PR.
+- `npm run hooks:install` once per clone runs lint and typecheck before every `git push`.
 - HTTP layer: zod-validated inputs (400 on bad query/identifier), JSON 404 +
   error handlers, CORS, security headers, and a best-effort rate limit on the
   free routes. API described in [`openapi.yaml`](openapi.yaml).
