@@ -5,7 +5,7 @@
       "command": "node",
       "args": ["/absolute/path/to/pr-legislative-x402/dist/mcp/index.js"],
       "env": {
-        "PR_X402_API_BASE": "https://YOUR-DEPLOYMENT.vercel.app",
+        "PR_X402_API_BASE": "https://pr-legislative-x402.cjimenez-0b6.workers.dev",
         "WALLET_PRIVATE_KEY": ""
       }
     }

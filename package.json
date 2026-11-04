@@ -19,7 +19,11 @@
     "test:testnet": "node --env-file-if-exists=.env --import tsx scripts/testnet-smoke.ts",
     "typecheck": "node node_modules/typescript-native/bin/tsc --noEmit",
     "lint": "oxlint",
-    "hooks:install": "git config core.hooksPath .githooks"
+    "hooks:install": "git config core.hooksPath .githooks",
+    "cf:test": "vitest run --config migration.config.ts",
+    "cf:build": "wrangler deploy --dry-run --outdir .cf-build",
+    "cf:preview": "wrangler versions upload",
+    "cf:verify": "node scripts/migration-runtime.cjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.0",
