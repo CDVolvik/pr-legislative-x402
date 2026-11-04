@@ -2,7 +2,7 @@
 
 **Pay-per-call access to structured Puerto Rico legislative data, over the [x402](https://x402.org) agent-payment standard.**
 
-**▶ Migration candidate:** [pr-legislative-x402.cjimenez-0b6.workers.dev](https://pr-legislative-x402.cjimenez-0b6.workers.dev) — try [`/health`](https://pr-legislative-x402.cjimenez-0b6.workers.dev/health), [`/v1/preview`](https://pr-legislative-x402.cjimenez-0b6.workers.dev/v1/preview), [`/v1/bills/search?q=solar`](https://pr-legislative-x402.cjimenez-0b6.workers.dev/v1/bills/search?q=solar). (Sample data, payments off.)
+**▶ API:** [legislative.r21digital.com](https://legislative.r21digital.com) — try [`/health`](https://legislative.r21digital.com/health), [`/v1/preview`](https://legislative.r21digital.com/v1/preview), [`/v1/bills/search?q=solar`](https://legislative.r21digital.com/v1/bills/search?q=solar). (Sample data, payments off.)
 
 An HTTP API + MCP server that lets AI agents search and read measures of the
 Puerto Rico Legislative Assembly (Asamblea Legislativa) — and pay per call in
@@ -171,6 +171,6 @@ openapi.yaml · vercel.json · Dockerfile · .github/workflows/ci.yml
 
 MIT. Built by R21 Digital.
 
-## Hosting migration
+## Hosting
 
-The migration branch builds the existing Worker with `npm ci && npm run cf:test && npm run cf:build` and uploads a version with `npm run cf:preview`. Uploading a version does not promote it. The main branch and current deployment remain unchanged until approval. Database and payment bindings must remain absent. The existing static landing page is retained; separate content changes are excluded.
+The API runs on a Cloudflare Worker at `https://legislative.r21digital.com`, a custom domain on the existing zone (`routes` in `wrangler.jsonc`). The `workers.dev` address stays enabled as a secondary address. Every push to `main` runs `npm ci && npm run cf:test && npm run cf:build && npm run cf:verify` in Workers Builds and then deploys with `npx wrangler deploy`; branch pushes do not build or deploy. `npm run cf:preview` uploads a version without promoting it. Database and payment bindings must remain absent on this deployment (sample data, payments off); the existing static landing page is retained.

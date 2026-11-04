@@ -11,7 +11,7 @@ info:
 servers:
   - url: http://localhost:4021
     description: Local dev (payments off)
-  - url: https://pr-legislative-x402.cjimenez-0b6.workers.dev
+  - url: https://legislative.r21digital.com
     description: Production
 paths:
   /health:

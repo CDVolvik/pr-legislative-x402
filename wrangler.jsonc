@@ -10,7 +10,9 @@
     "directory": "./public"
   },
   "triggers": { "crons": [] },
+  "workers_dev": true,
   "preview_urls": true,
+  "routes": [{ "pattern": "legislative.r21digital.com", "custom_domain": true }],
   "observability": {
     "enabled": true,
     "head_sampling_rate": 0.1
