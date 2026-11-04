@@ -5,7 +5,7 @@
       "command": "node",
       "args": ["/absolute/path/to/pr-legislative-x402/dist/mcp/index.js"],
       "env": {
-        "PR_X402_API_BASE": "https://pr-legislative-x402.cjimenez-0b6.workers.dev",
+        "PR_X402_API_BASE": "https://legislative.r21digital.com",
         "WALLET_PRIVATE_KEY": ""
       }
     }
