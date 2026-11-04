@@ -2,7 +2,7 @@
 
 **Pay-per-call access to structured Puerto Rico legislative data, over the [x402](https://x402.org) agent-payment standard.**
 
-**▶ Live demo:** [pr-legislative-x402.vercel.app](https://pr-legislative-x402.vercel.app) — try [`/health`](https://pr-legislative-x402.vercel.app/health), [`/v1/preview`](https://pr-legislative-x402.vercel.app/v1/preview), [`/v1/bills/search?q=solar`](https://pr-legislative-x402.vercel.app/v1/bills/search?q=solar). (Sample data, payments off.)
+**▶ Migration candidate:** [pr-legislative-x402.cjimenez-0b6.workers.dev](https://pr-legislative-x402.cjimenez-0b6.workers.dev) — try [`/health`](https://pr-legislative-x402.cjimenez-0b6.workers.dev/health), [`/v1/preview`](https://pr-legislative-x402.cjimenez-0b6.workers.dev/v1/preview), [`/v1/bills/search?q=solar`](https://pr-legislative-x402.cjimenez-0b6.workers.dev/v1/bills/search?q=solar). (Sample data, payments off.)
 
 An HTTP API + MCP server that lets AI agents search and read measures of the
 Puerto Rico Legislative Assembly (Asamblea Legislativa) — and pay per call in
@@ -170,3 +170,7 @@ openapi.yaml · vercel.json · Dockerfile · .github/workflows/ci.yml
 ```
 
 MIT. Built by R21 Digital.
+
+## Hosting migration
+
+The migration branch builds the existing Worker with `npm ci && npm run cf:test && npm run cf:build` and uploads a version with `npm run cf:preview`. Uploading a version does not promote it. The main branch and current deployment remain unchanged until approval. Database and payment bindings must remain absent. The existing static landing page is retained; separate content changes are excluded.
